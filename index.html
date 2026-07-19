@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Portfolio - Raihan</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    
+    <style>
+        :root {
+            --bg-glow: radial-gradient(circle at top right, #0f2b5c, #070a13 70%);
+            --bg-color: #070a13;
+            --text-color: #e2e8f0;
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --border-color: rgba(255, 255, 255, 0.04);
+        }
+        
+        .light {
+            --bg-glow: radial-gradient(circle at top right, #bfdbfe, #f8fafc 70%);
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            background: var(--bg-glow);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .glass-dark {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #60a5fa, #22d3ee, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #070a13;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        /* Cursor Glow */
+        #cursor-glow {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+
+        /* Border Animasi Foto Profil */
+        .profile-border::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(90deg, #3b82f6, #22d3ee, #818cf8, #3b82f6);
+            border-radius: 50%;
+            z-index: -1;
+            background-size: 400% 400%;
+            animation: moveBorder 8s linear infinite;
+        }
+        @keyframes moveBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        .timeline-line {
+            position: relative;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+
+    <div id="loader">
+        <div class="flex flex-col items-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-4"></div>
+            <h2 class="text-white font-bold tracking-widest text-lg">MEMUAT PORTOFOLIO...</h2>
+        </div>
+    </div>
+
+    <div id="cursor-glow"></div>
+
+    <div id="particles-js"></div>
+
+    <div class="content-wrapper">
+        <nav id="navbar" class="fixed top-0 left-0 w-full z-50 glass py-4 transition-all duration-300">
+            <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+                <span class="text-xl font-bold text-gradient">MyPorto.</span>
+                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#hero" class="hover:text-blue-400 transition-colors">Home</a>
+                    <a href="#featured" class="hover:text-blue-400 transition-colors">Featured</a>
+                    <a href="#projects" class="hover:text-blue-400 transition-colors">Projects</a>
+                    <a href="#timeline" class="hover:text-blue-400 transition-colors">Timeline</a>
+                    <a href="#github" class="hover:text-blue-400 transition-colors">GitHub</a>
+                    <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="glass p-2 rounded-full text-blue-400 focus:outline-none">
+                        <i id="theme-icon" class="fas fa-sun"></i>
+                    </button>
+                    <a href="CV_KAMU.pdf" download class="glass px-4 py-2 rounded-full text-xs font-semibold text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all shadow-lg">
+                        <i class="fas fa-download mr-1"></i> CV
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <section id="hero" class="pt-36 pb-20 px-4 max-w-4xl mx-auto flex flex-col items-center text-center">
+            <div data-aos="zoom-in" class="relative inline-block mb-8">
+                <div class="absolute inset-0 bg-blue-500 rounded-full blur-2xl opacity-40 shadow-[0_0_50px_rgba(59,130,246,0.6)]"></div>
+                <div class="w-32 h-32 rounded-full relative z-10 bg-slate-900 flex items-center justify-center profile-border">
+                    <img src="fotoprofil.jpg" alt="Raihan" class="w-full h-full rounded-full object-cover">
+                </div>
+            </div>
+            
+            <h1 data-aos="fade-up" data-aos-delay="200" class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+                Halo, nama saya <span class="text-gradient">Raihan</span>
+            </h1>
+            <p data-aos="fade-up" data-aos-delay="300" class="text-xl font-medium text-blue-400 mb-2">
+                Siswa SMK PGRI Subang
+            </p>
+            
+            <div data-aos="fade-up" data-aos-delay="350" class="text-lg md:text-2xl font-semibold mb-6 h-8">
+                <span id="typing-text" class="text-gray-300"></span><span class="animate-pulse text-blue-400">|</span>
+            </div>
+
+            <div data-aos="fade-up" data-aos-delay="400" class="grid grid-cols-3 gap-4 max-w-md mx-auto my-6 w-full">
+                <div class="glass p-3 rounded-xl">
+                    <p class="text-xl md:text-2xl font-bold text-blue-400">10+</p>
+                    <p class="text-xs text-gray-400">Project</p>
+                </div>
+                <div class="glass p-3 rounded-xl">
+                    <p class="text-xl md:text-2xl font-bold text-blue-400">1 Thn</p>
+                    <p class="text-xs text-gray-400">Belajar</p>
+                </div>
+                <div class="glass p-3 rounded-xl">
+                    <p class="text-xl md:text-2xl font-bold text-blue-400">1000+</p>
+                    <p class="text-xs text-gray-400">Baris Kode</p>
+                </div>
+            </div>
+
+            <div data-aos="fade-up" data-aos-delay="500" class="flex justify-center gap-4 mt-4">
+                <a href="#featured" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold transition-all text-sm text-white shadow-lg shadow-blue-500/20">
+                    Featured Project <i class="fas fa-star ml-1"></i>
+                </a>
+                <a href="#contact" class="px-5 py-2.5 rounded-xl glass hover:bg-white/10 font-semibold transition-all text-sm text-gray-300">
+                    Hubungi Saya
+                </a>
+            </div>
+        </section>
+
+        <section class="py-12 px-4 max-w-4xl mx-auto">
+            <div class="glass p-6 rounded-3xl text-center">
+                <h3 class="text-sm uppercase tracking-wider text-gray-400 mb-6 font-semibold">💻 Tech Stack & Keahlian</h3>
+                <div class="flex flex-wrap justify-center gap-8 text-4xl md:text-5xl text-gray-400">
+                    <i class="devicon-html5-plain-wordmark colored transition-transform hover:scale-110" title="HTML5"></i>
+                    <i class="devicon-css3-plain-wordmark colored transition-transform hover:scale-110" title="CSS3"></i>
+                    <i class="devicon-javascript-plain colored transition-transform hover:scale-110" title="JavaScript"></i>
+                    <i class="devicon-php-plain colored transition-transform hover:scale-110" title="PHP"></i>
+                    <i class="devicon-mysql-plain-wordmark colored transition-transform hover:scale-110" title="MySQL"></i>
+                    <i class="devicon-git-plain colored transition-transform hover:scale-110" title="Git"></i>
+                    <i class="devicon-github-original colored transition-transform hover:scale-110" title="GitHub"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="featured" class="py-16 px-4 max-w-6xl mx-auto">
+            <div class="text-center mb-10">
+                <span class="text-yellow-400 text-sm font-bold uppercase tracking-widest"><i class="fas fa-star mr-1"></i> Utama</span>
+                <h2 data-aos="fade-up" class="text-3xl font-bold text-white mt-1">Featured Project</h2>
+                <div class="w-16 h-1 bg-yellow-400 mx-auto mt-2 rounded-full"></div>
+            </div>
+
+            <div data-aos="fade-up" class="glass-dark rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 p-6 border border-yellow-500/30 shadow-[0_0_30px_rgba(234,179,8,0.1)]">
+                <div class="aspect-video bg-gray-900 rounded-xl overflow-hidden relative group">
+                    <img src="screenshot-featured.jpg" alt="Featured Screenshot" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-semibold">
+                        <i class="fas fa-search-plus mr-2"></i> Screenshot Project
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between p-2">
+                    <div>
+                        <span class="text-xs font-bold text-blue-400 uppercase">Aplikasi Web Unggulan</span>
+                        <h3 class="text-2xl font-bold text-white mt-1 mb-3">AI & Manga Web Ecosystem</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Integrasi platform terbaik untuk eksplorasi jagat hiburan digital berkinerja tinggi, responsif, dan didukung kecerdasan buatan.</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-6">
+                        <span class="text-xs px-2.5 py-1 rounded bg-yellow-500/10 text-yellow-400 font-semibold border border-yellow-500/20">Fullstack</span>
+                        <a href="https://github.com/hanz712" target="_blank" class="text-sm text-blue-400 hover:underline"><i class="fab fa-github mr-1"></i> Periksa Repositori</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-16 px-4 max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 data-aos="fade-up" class="text-2xl font-bold text-white">Semua Project</h2>
+                <div data-aos="fade-up" class="w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+                <p class="text-xs text-gray-400 mt-2">Sentuh kartu project untuk melihat preview animasi</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div data-aos="fade-up" data-aos-delay="100" class="glass-dark rounded-2xl overflow-hidden hover:transform hover:-translate-y-1 transition-all duration-300 flex flex-col group">
+                    <div class="h-44 bg-gray-900 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=500&q=80" alt="Portofolio" class="w-full h-full object-cover absolute inset-0 group-hover:opacity-0 transition-opacity duration-300 z-10">
+                        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3BndjZ4d2NjdG45NmE1cTM4c3d5cDRoY2d5dzJ5bDRoZHp5ZHZ1diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3p50WJ9vRZjg4/giphy.gif" alt="Preview GIF" class="w-full h-full object-cover absolute inset-0">
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Portofolio Han</h3>
+                            <p class="text-xs text-gray-400 mb-4">Project website portofolio pribadi premium berbasis web responsif.</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400">HTML / CSS</span>
+                            <a href="https://github.com/hanz712/portofolio-han" target="_blank" class="text-xs text-blue-400 hover:underline">
+                                <i class="fab fa-github mr-1"></i> GitHub Repo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="200" class="glass-dark rounded-2xl overflow-hidden hover:transform hover:-translate-y-1 transition-all duration-300 flex flex-col group">
+                    <div class="h-44 bg-gray-900 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=500&q=80" alt="Mangaverse" class="w-full h-full object-cover absolute inset-0 group-hover:opacity-0 transition-opacity duration-300 z-10">
+                        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3BndjZ4d2NjdG45NmE1cTM4c3d5cDRoY2d5dzJ5bDRoZHp5ZHZ1diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3p50WJ9vRZjg4/giphy.gif" alt="Preview GIF" class="w-full h-full object-cover absolute inset-0">
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Mangaverse</h3>
+                            <p class="text-xs text-gray-400 mb-4">Platform web interaktif untuk penjelajahan katalog komik terpopuler.</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400">JavaScript</span>
+                            <a href="https://github.com/hanz712/mangaverse" target="_blank" class="text-xs text-blue-400 hover:underline">
+                                <i class="fab fa-github mr-1"></i> GitHub Repo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="300" class="glass-dark rounded-2xl overflow-hidden hover:transform hover:-translate-y-1 transition-all duration-300 flex flex-col border border-yellow-500/20">
+                    <div class="h-44 bg-gray-900 flex items-center justify-center text-3xl text-yellow-500 relative">
+                        <i class="fas fa-hourglass-half animate-spin-slow"></i>
+                        <span class="absolute top-3 right-3 text-xs bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-semibold border border-yellow-500/20">
+                            In Progress
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Web Aniverse</h3>
+                            <p class="text-xs text-gray-400 mb-4">Project website bertema anime universe yang saat ini sedang dikembangkan.</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-xs px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400">Developing</span>
+                            <span class="text-xs text-gray-500 italic"><i class="fas fa-tools mr-1"></i> Sedang Dibuat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="py-16 px-4 max-w-3xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 data-aos="fade-up" class="text-2xl font-bold text-white">📝 Timeline Perjalanan Belajar</h2>
+                <div data-aos="fade-up" class="w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+            </div>
+
+            <div class="relative timeline-line pl-8 space-y-8">
+                <div data-aos="fade-left" class="relative">
+                    <div class="absolute -left-10 top-1 bg-blue-500 w-4 h-4 rounded-full border-4 border-slate-950 z-20"></div>
+                    <div class="glass p-5 rounded-2xl">
+                        <span class="text-xs font-bold bg-blue-500/20 text-blue-400 px-2.5 py-0.5 rounded-full">2025</span>
+                        <h4 class="text-base font-bold text-white mt-2">Mulai belajar HTML & CSS</h4>
+                        <p class="text-xs text-gray-400 mt-1">Mempelajari dasar pemrograman frontend berupa struktur dokumen HTML dan teknik styling menggunakan CSS layouting.</p>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left" class="relative">
+                    <div class="absolute -left-10 top-1 bg-cyan-400 w-4 h-4 rounded-full border-4 border-slate-950 z-20"></div>
+                    <div class="glass p-5 rounded-2xl">
+                        <span class="text-xs font-bold bg-cyan-400/20 text-cyan-400 px-2.5 py-0.5 rounded-full">2026</span>
+                        <h4 class="text-base font-bold text-white mt-2">Eksplorasi Ekosistem Web & API</h4>
+                        <ul class="text-xs text-gray-400 mt-2 list-disc list-inside space-y-1">
+                            <li>Membuat Portfolio</li>
+                            <li>Membuat MangaVerse</li>
+                            <li>Belajar API</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certificates" class="py-16 px-4 max-w-5xl mx-auto glass rounded-3xl my-6">
+            <div class="text-center mb-12">
+                <h2 data-aos="fade-up" class="text-2xl font-bold text-white">🏆 Sertifikat</h2>
+                <div data-aos="fade-up" class="w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+            </div>
+
+            <div class="max-w-xl mx-auto">
+                <div data-aos="zoom-in" class="glass-dark p-4 rounded-2xl">
+                    <div class="overflow-hidden rounded-xl mb-3 aspect-video bg-gray-900 flex items-center justify-center text-gray-600 relative">
+                        <i class="fas fa-certificate text-4xl text-blue-500/30 absolute"></i>
+                        <img src="sertifikate2.jpg" alt="Sertifikat Event Media Sosial" class="w-full h-full object-cover relative z-10">
+                    </div>
+                    <h3 class="text-base font-bold text-white">Sertifikat Partisipasi Workshop AI</h3>
+                    <p class="text-xs text-blue-400 mb-1">Diperoleh dari Event Media Sosial</p>
+                    <p class="text-xs text-gray-400 mt-2">Penghargaan atas keikutsertaan dan penyelesaian tantangan teknologi AI berskala komunitas digital.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 px-4 max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl font-bold text-white">💬 Testimoni</h2>
+                <div class="w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+                <p class="text-xs text-gray-400 mt-2">(Jika nanti pernah membuat web untuk orang lain)</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass p-5 rounded-2xl relative">
+                    <i class="fas fa-quote-left text-3xl text-blue-500/10 absolute top-4 left-4"></i>
+                    <p class="text-xs text-gray-400 italic relative z-10">"Hasil pengerjaan web sangat rapi, desain modern, dan performa cepat sesuai dengan kebutuhan yang diminta."</p>
+                    <p class="text-xs font-bold text-white mt-4">- Klien Komunitas</p>
+                </div>
+                <div class="glass p-5 rounded-2xl relative">
+                    <i class="fas fa-quote-left text-3xl text-blue-500/10 absolute top-4 left-4"></i>
+                    <p class="text-xs text-gray-400 italic relative z-10">"Sangat puas dengan struktur kode yang dibuat. Responsif sekali saat dibuka di HP maupun laptop."</p>
+                    <p class="text-xs font-bold text-white mt-4">- Rekan Developer</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="github" class="py-16 px-4 max-w-4xl mx-auto text-center">
+            <div class="text-center mb-10">
+                <h2 data-aos="fade-up" class="text-2xl font-bold text-white">📈 Aktivitas GitHub</h2>
+                <div data-aos="fade-up" class="w-16 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+            </div>
+            
+            <div data-aos="zoom-in" class="flex flex-col items-center gap-4 p-4 glass rounded-2xl max-w-2xl mx-auto overflow-x-auto">
+                <a href="https://github.com/hanz712" target="_blank" class="text-sm font-semibold text-blue-400 hover:underline mb-2">
+                    <i class="fab fa-github mr-1"></i> Kunjungi Profil GitHub @hanz712
+                </a>
+                <img src="https://github-readme-stats.vercel.app/api?username=hanz712&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0f172a00" alt="GitHub Stats" class="max-w-full">
+                <img src="https://github-readme-streak-stats.herokuapp.com/?user=hanz712&theme=tokyonight&hide_border=true&background=0f172a00" alt="GitHub Streak" class="max-w-full mt-2">
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 px-4 max-w-2xl mx-auto">
+            <div class="glass p-6 md:p-10 rounded-3xl shadow-2xl">
+                <div class="text-center mb-8">
+                    <h2 data-aos="fade-up" class="text-2xl font-bold text-white">📞 Kontak</h2>
+                    <p class="text-gray-400 text-xs mt-1">Silakan tinggalkan pesan atau hubungi lewat platform di bawah.</p>
+                </div>
+
+                <div class="flex justify-center gap-8 mb-8 text-3xl">
+                    <a href="https://wa.me/6281234567890" target="_blank" class="text-gray-400 hover:text-green-400 transition transform hover:scale-110" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="mailto:emailkamu@gmail.com" class="text-gray-400 hover:text-red-400 transition transform hover:scale-110" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/hanz712" target="_blank" class="text-gray-400 hover:text-white transition transform hover:scale-110" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank" class="text-gray-400 hover:text-blue-400 transition transform hover:scale-110" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+
+                <form data-aos="fade-up" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Nama</label>
+                            <input type="text" placeholder="Nama Anda" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-blue-500 text-gray-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Email</label>
+                            <input type="email" placeholder="email@anda.com" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-blue-500 text-gray-200">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gray-400 mb-1">Pesan</label>
+                        <textarea rows="4" placeholder="Tulis pesan Anda..." class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-blue-500 text-gray-200"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-2.5 rounded-xl font-bold text-xs text-white transition shadow-lg">
+                        Kirim Pesan <i class="fas fa-paper-plane ml-1"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <footer class="border-t border-gray-900 bg-gray-950 py-6 text-center text-xs text-gray-500">
+            <p>&copy; 2026 Portofolio Premium Raihan. Dibuat dengan <i class="fas fa-heart text-blue-500"></i>.</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.visibility = 'hidden', 500);
+        });
+
+        AOS.init({ duration: 800, once: true });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('py-2', 'bg-slate-950/80');
+                nav.classList.remove('py-4');
+            } else {
+                nav.classList.remove('py-2', 'bg-slate-950/80');
+                nav.classList.add('py-4');
+            }
+        });
+
+        const words = ["Web Developer", "Front-End Developer", "AI Enthusiast"];
+        let i = 0, timer;
+        function typingEffect() {
+            let word = words[i].split("");
+            var loopTyping = function() {
+                if (word.length > 0) {
+                    document.getElementById('typing-text').innerHTML += word.shift();
+                } else {
+                    setTimeout(deletingEffect, 2000);
+                    return false;
+                }
+                timer = setTimeout(loopTyping, 100);
+            };
+            loopTyping();
+        }
+        function deletingEffect() {
+            let word = words[i].split("");
+            var loopDeleting = function() {
+                if (word.length > 0) {
+                    word.pop();
+                    document.getElementById('typing-text').innerHTML = word.join("");
+                } else {
+                    if (words.length > i + 1) i++;
+                    else i = 0;
+                    setTimeout(typingEffect, 500);
+                    return false;
+                }
+                timer = setTimeout(loopDeleting, 60);
+            };
+            loopDeleting();
+        }
+        typingEffect();
+
+        const glow = document.getElementById('cursor-glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.opacity = '1';
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mouseleave', () => glow.style.opacity = '0');
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('light');
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('light')) {
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+            }
+        });
+
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#3b82f6" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.2, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#3b82f6", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>
